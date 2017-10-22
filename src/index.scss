@@ -1,0 +1,18 @@
+#main_container {
+    width: 100vw;
+    height: 100vh;
+}
+
+.title-black {
+    color: black;
+}
+
+*[hbox] {
+    display: flex;
+    flex-direction: row;
+}
+
+*[vbox] {
+    display: flex;
+    flex-direction: column;
+}
