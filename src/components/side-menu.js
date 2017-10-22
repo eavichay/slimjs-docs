@@ -12,8 +12,9 @@ import {template, tag} from 'slim-js/Decorators'
         font-weight: bold;
     }
     side-menu {
-        display: inline-block;
+        display: inline-flex;
         max-width: 20em;
+        min-width: 12em;
         width: 30%;
     }
 </style>

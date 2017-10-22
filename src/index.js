@@ -1,5 +1,6 @@
 import {Slim} from 'slim-js'
 import {tag, template} from 'slim-js/Decorators'
+import './vendor/material'
 import './index.scss'
 import './components/header'
 import './components/side-menu'
@@ -11,11 +12,16 @@ import './components/simple-router'
 @template(`
 <div vbox id="main_container">
     <slim-docs-header class="mdl-layout__header mdl-layout--fixed-header"></slim-docs-header>
-    <div hbox>
+    <div id="docs_container" hbox>
       <side-menu vbox on-item-select="handleItemSelected" items="[[menuItems]]"></side-menu>
-      <doc-router routes="[[menuItems]]"></doc-router>
+      <doc-router vbox routes="[[menuItems]]"></doc-router>
     </div>
 </div>
+<style>
+    slim-docs #docs_container {
+        height: 100%
+    }
+</style>
 `)
 class _ extends Slim {
   menuItems = [
