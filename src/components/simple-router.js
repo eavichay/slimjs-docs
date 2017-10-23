@@ -10,11 +10,15 @@ const markdownBank = {}
 @tag('doc-router')
 @template(`
 <div slim-if="isRouteValid" #doc></div>
+<div slim-if="isLoading">
+    <div class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+</div>
 <div slim-if="!isRouteValid" route="[[currentRoute]]">
     <div>:( This page does not exists. Try another topic from the menu</div>
 </div>
 <style>
   doc-router {
+    padding-left: 2em;
     width: 100%;
     overflow-x: auto;    
   }
@@ -30,35 +34,35 @@ const markdownBank = {}
 `)
 export default class _ extends Slim {
 
-  routes = []
   currentRoute = ''
   _handleRouteChanged = null
   doc = null
 
   isRouteValid = true
+  isLoading = false
 
   currentRouteChanged() {
-    this.isRouteValid = this.routes.some( route => route.target === '#!' + this.currentRoute )
-    if (this.isRouteValid) {
-      const markdownURL = `/docs/${this.currentRoute}.md`
-      if (markdownBank[markdownURL]) {
-        this.generateMarkdown(markdownBank[markdownURL])
-      } else {
-        fetch(markdownURL)
-          .then( r => {
-            if (r.ok) {
-              return r.text()
-            } else throw new Error("Error loading markdown file")
-          })
-          .then(markdown => {
-            markdownBank[markdownURL] = markdown
-            this.generateMarkdown(markdown)
-          })
-          .catch(() => {
-            this.doc.innerHTML = ''
-            this.isRouteValid = false
-          })
-      }
+    const markdownURL = `/docs/${this.currentRoute}.md`
+    if (markdownBank[markdownURL]) {
+      this.generateMarkdown(markdownBank[markdownURL])
+    } else {
+      this.isLoading = true
+      fetch(markdownURL)
+        .then( r => {
+          if (r.ok) {
+            return r.text()
+          } else throw new Error("Error loading markdown file")
+        })
+        .then(markdown => {
+          markdownBank[markdownURL] = markdown
+          this.generateMarkdown(markdown)
+          this.isLoading = false
+        })
+        .catch(() => {
+          this.doc.innerHTML = ''
+          this.isRouteValid = false
+          this.isLoading = false
+        })
     }
   }
 
@@ -68,21 +72,21 @@ export default class _ extends Slim {
     this.findAll('pre').forEach(e => {
       hljs.highlightBlock(e)
     })
-    // hljs.highlightBlock(this.doc)
+    this.isRouteValid = true
   }
 
   constructor() {
     super()
     this._handleRouteChanged = this.handleRouteChanged.bind(this)
     window.addEventListener('hashchange', this._handleRouteChanged)
-    this.currentRoute = window.location.hash.split('#!')[1]
+    this.currentRoute = window.location.hash.split('#/')[1]
   }
 
   onRemoved() {
     window.removeEventListener('hashchange', this._handleRouteChanged)
   }
 
-  handleRouteChanged(e) {
-    this.currentRoute = window.location.hash.split('#!')[1]
+  handleRouteChanged() {
+    this.currentRoute = window.location.hash.split('#/')[1]
   }
 }

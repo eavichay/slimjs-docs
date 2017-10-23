@@ -1,16 +1,15 @@
 import {Slim} from 'slim-js'
 import {template, tag} from 'slim-js/Decorators'
 
+import './side-menu-item';
+
 // noinspection JSUnusedGlobalSymbols
 @tag('side-menu')
 @template(`
 <ul class="mdl-list">
-  <li class="mdl-list__item" slim-repeat="items" slim-repeat-as="item" click="handleSelect" bind>[[item.label]]</li>
+  <side-menu-item slim-repeat="items" slim-repeat-as="item"></side-menu-item>
 </ul>
 <style>
-    side-menu li[selected] {
-        font-weight: bold;
-    }
     side-menu {
         display: inline-flex;
         max-width: 20em;
@@ -25,23 +24,20 @@ export default class _ extends Slim {
 
   selectedItem = null
 
-  selectItem(item) {
-    this.findAll('li').forEach(e => {
-      if (e.item === item) {
-        const fakeEvent = new Event('click')
-        e.dispatchEvent(fakeEvent)
-      }
-    })
+  onCreated() {
+    this.addEventListener('menu-item-selected', e => this.selectItem(e.detail))
   }
 
-  handleSelect (e) {
-    this.findAll('li').forEach(li => {
-      if (e.target === li) {
-        li.setAttribute('selected', '')
+  selectItem(selection) {
+    let selectionItemElement
+    this.findAll('side-menu-item').forEach(menuItem => {
+      if (menuItem.item === selection) {
+        selectionItemElement = menuItem
+        menuItem.setAttribute('selected', '')
       } else {
-        li.removeAttribute('selected')
+        menuItem.removeAttribute('selected')
       }
     })
-    this.callAttribute('on-item-select', e.target.item)
+    this.callAttribute('on-item-select', selection)
   }
 }

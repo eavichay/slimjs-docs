@@ -13,8 +13,8 @@ import './components/simple-router'
 <div vbox id="main_container">
     <slim-docs-header class="mdl-layout__header mdl-layout--fixed-header"></slim-docs-header>
     <div id="docs_container" hbox>
-      <side-menu vbox on-item-select="handleItemSelected" items="[[menuItems]]"></side-menu>
-      <doc-router vbox routes="[[menuItems]]"></doc-router>
+      <side-menu vbox class="mdl-components__nav docs-text-styling mdl-shadow--4dp" on-item-select="handleItemSelected" items="[[menuItems]]"></side-menu>
+      <doc-router vbox></doc-router>
     </div>
 </div>
 <style>
@@ -24,18 +24,29 @@ import './components/simple-router'
 </style>
 `)
 class _ extends Slim {
+
   menuItems = [
-    { label: 'Getting started', target: '#!/getting-started' },
-    { label: 'Create your first custom element', target: '#!/create-your-first-custom-element' },
-    { label: 'Data binding', target: '#!/data-binding' },
+    { label: 'Getting started', target: 'getting-started' },
+    { label: 'Create your first custom element', target: 'create-your-first-custom-element', children: [
+      { label: 'Component Lifecycle', target: 'component-lifecycle' }
+    ] },
+    { label: 'Data binding', target: 'data-binding' },
   ]
 
+  constructor() {
+    super()
+    this.style.visibility = 'hidden';
+  }
+
   handleItemSelected(item) {
-    window.location.hash = item.target
+    window.location.hash = `/${item.target}`
   }
 
   onAfterUpdate() {
     this.find('side-menu').selectItem(this.menuItems[0])
+    window.requestAnimationFrame(() => {
+      this.style.visibility = null
+    })
   }
 }
 
