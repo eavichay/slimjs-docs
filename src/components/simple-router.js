@@ -3,7 +3,7 @@ import {tag, template} from "slim-js/Decorators"
 import showdown from "showdown"
 import highlighter from "showdown-highlight"
 import hljs from 'highlight.js'
-import 'highlight.js/styles/github.css'
+import 'highlight.js/styles/atom-one-light.css'
 
 const markdownBank = {}
 
@@ -65,6 +65,9 @@ export default class _ extends Slim {
   generateMarkdown(content) {
     const converter = new showdown.Converter({extensions: [highlighter]})
     this.doc.innerHTML = converter.makeHtml(content)
+    this.findAll('pre').forEach(e => {
+      hljs.highlightBlock(e)
+    })
     // hljs.highlightBlock(this.doc)
   }
 
