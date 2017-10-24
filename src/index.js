@@ -6,7 +6,7 @@ import './components/header'
 import './components/side-menu'
 import './components/simple-router'
 // IE11?
-// require('babel-polyfill');
+require('babel-polyfill');
 
 @tag('slim-docs')
 @template(`
@@ -17,9 +17,27 @@ import './components/simple-router'
       <doc-router vbox></doc-router>
     </div>
 </div>
+<a href="https://github.com/eavichay/slim.js" target="_blank" id="view-source"
+    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">
+    <i class="material-icons md-24">link</i> <span>Project on github</span>
+    <span class="mdl-button__ripple-container">
+        <span class="mdl-ripple is-animating" style="width: 255.952px; height: 255.952px; transform: translate(-50%, -50%) translate(72px, 27px);">
+        </span>
+    </span>
+</a>
 <style>
     slim-docs #docs_container {
         height: 100%
+    }
+    
+    #view-source {
+      position: fixed;
+      display: block;
+      right: 0;
+      bottom: 0;
+      margin-right: 40px;
+      margin-bottom: 40px;
+      z-index: 900;
     }
 </style>
 `)
@@ -36,6 +54,8 @@ class _ extends Slim {
   constructor() {
     super()
     this.style.visibility = 'hidden';
+    this.classList.add('mdl-layout__container')
+    this.classList.add('has-scrolling-header')
   }
 
   handleItemSelected(item) {
@@ -44,7 +64,7 @@ class _ extends Slim {
 
   onAfterUpdate() {
     this.find('side-menu').selectItem(this.menuItems[0])
-    window.requestAnimationFrame(() => {
+    Slim.__invokeAsap(() => {
       this.style.visibility = null
     })
   }

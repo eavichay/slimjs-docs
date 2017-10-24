@@ -21,7 +21,7 @@ import {tag, template} from "slim-js/Decorators"
     }
     
     side-menu-item > div[padded] li {
-        font-size: 92%;
+        font-size: 100%;
         padding-top: 0;
         padding-bottom: 0;
     }
@@ -40,10 +40,10 @@ class _ extends Slim {
   get isInteractive() { return true }
 
   hasChildren(item) {
-    return item.children ? 'true' : 'false'
+    return item && item.children ? 'true' : 'false'
   }
 
-  onAfterRender() {
+  onUpdate() {
     this.subMenu = this.item.children;
   }
 

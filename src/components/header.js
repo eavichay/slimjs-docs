@@ -13,7 +13,7 @@ import GithubIcon from '../assets/github-icon.png'
     <span class="mdl-layout-spacer"></span>
       
     <nav>
-        <span class="mdl-navigation__link"><a href="https://github.com/eavichay/slim.js"><img src="${GithubIcon}" width="32" height="32" /></a></span>
+        <span class="mdl-navigation__link"><a href="https://github.com/eavichay/slim.js/issues">Submit an issue</a></span>
     </nav>
 </nav>
 <style>
