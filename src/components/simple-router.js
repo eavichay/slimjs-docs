@@ -19,6 +19,7 @@ const markdownBank = {}
 <style>
   doc-router {
     padding-left: 2em;
+    padding-right: 2em;
     width: 100%;
     overflow-x: auto;    
   }

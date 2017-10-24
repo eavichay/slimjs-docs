@@ -7,7 +7,7 @@ import './side-menu-item';
 @tag('side-menu')
 @template(`
 <ul class="mdl-list">
-  <side-menu-item slim-repeat="items" slim-repeat-as="item"></side-menu-item>
+  <side-menu-item on-selected="selectItem" slim-repeat="items" slim-repeat-as="item"></side-menu-item>
 </ul>
 <style>
     side-menu {
@@ -24,20 +24,11 @@ export default class _ extends Slim {
 
   selectedItem = null
 
-  onCreated() {
+  onBeforeCreated() {
     this.addEventListener('menu-item-selected', e => this.selectItem(e.detail))
   }
 
   selectItem(selection) {
-    let selectionItemElement
-    this.findAll('side-menu-item').forEach(menuItem => {
-      if (menuItem.item === selection) {
-        selectionItemElement = menuItem
-        menuItem.setAttribute('selected', '')
-      } else {
-        menuItem.removeAttribute('selected')
-      }
-    })
     this.callAttribute('on-item-select', selection)
   }
 }

@@ -12,8 +12,9 @@ import GithubIcon from '../assets/github-icon.png'
     </span>
     <span class="mdl-layout-spacer"></span>
       
-    <nav>
+    <nav class="mdl-navigation">
         <span class="mdl-navigation__link"><a href="https://github.com/eavichay/slim.js/issues">Submit an issue</a></span>
+        <span class="mdl-navigation__link"><a href="https://github.com/eavichay/slimjs-docs/issues">Submit a documentation issue</a></span>
     </nav>
 </nav>
 <style>

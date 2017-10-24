@@ -1,4 +1,4 @@
-# Component Lifecycle
+# Lifecycle
 
 A Slim HTMLElement has a rich lifecycle so a developer can insert code hooks on many points in the component's life.
 

@@ -45,8 +45,9 @@ class _ extends Slim {
 
   menuItems = [
     { label: 'Getting started', target: 'getting-started' },
-    { label: 'Create your first custom element', target: 'create-your-first-custom-element', children: [
-      { label: 'Component Lifecycle', target: 'component-lifecycle' }
+    { label: 'Creating an element', target: 'creating-an-element', children: [
+      { label: 'Lifecycle', target: 'component-lifecycle' },
+      { label: 'Shadow-DOM', target: 'shadow-dom'}
     ] },
     { label: 'Data binding', target: 'data-binding' },
   ]
@@ -63,7 +64,7 @@ class _ extends Slim {
   }
 
   onAfterUpdate() {
-    this.find('side-menu').selectItem(this.menuItems[0])
+    // this.find('side-menu').selectItem(this.menuItems[0])
     Slim.__invokeAsap(() => {
       this.style.visibility = null
     })

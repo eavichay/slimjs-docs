@@ -5,7 +5,7 @@ import {tag, template} from "slim-js/Decorators"
 @template(`
 <li #rootitem has-children="[[hasChildren(item)]]" click="handleItemClick" class="mdl-list__item" click="handleSelect" bind>[[item.label]]</li>
 <div padded slim-if="item.children">
-    <side-menu-item slim-repeat="item.children" slim-repeat-as="item"></side-menu-item>
+    <side-menu-item on-selected="handleSelected" slim-repeat="item.children" slim-repeat-as="item"></side-menu-item>
 </div>
 <style>
     side-menu-item[selected] > li {
@@ -37,23 +37,59 @@ class _ extends Slim {
 
   subMenu = null
 
-  get isInteractive() { return true }
+  _checkRoute = null
+
+  onBeforeCreated() {
+    this._checkRoute = this.checkRoute.bind(this)
+    window.addEventListener('hashchange', this._checkRoute)
+  }
+
+  onAdded() {
+    this.checkRoute()
+  }
 
   hasChildren(item) {
     return item && item.children ? 'true' : 'false'
   }
 
   onUpdate() {
-    this.subMenu = this.item.children;
+    this.subMenu = this.item.children
+  }
+
+  checkRoute() {
+    try {
+      const hash = window.location.hash.split('#/')[1]
+      if (hash === this.item.target) {
+        this.triggerSelected()
+        this.setAttribute('selected','')
+      } else {
+        this.removeAttribute('selected')
+      }
+    } catch (err) { /* ignore error */ }
   }
 
   onItemChanged() {
     this.subMenu = this.item.children || [];
   }
 
-  handleItemClick(e) {
-    if (e.target === this.rootitem) {
-      this.dispatchEvent(new CustomEvent('menu-item-selected', {detail: e.target.item, bubbles: true}))
-    }
+  propagateSelected(item) {
+    this.callAttribute('on-selected', item)
+  }
+
+  handleSelected(item) {
+    this.propagateSelected(item)
+  }
+
+  triggerSelected() {
+    this.propagateSelected(this.item)
+    // this.dispatchEvent(new CustomEvent('menu-item-selected', {detail: this.item, bubbles: true}))
+  }
+
+  handleItemClick() {
+      this.triggerSelected()
+  }
+
+  onRemoved() {
+    window.removeEventListener('hashchange', this._checkRoute)
   }
 }
