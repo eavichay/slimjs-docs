@@ -26,7 +26,7 @@ After the component is up and running any modifications in bound properties or a
 For each bound property or attribute, a special callback (if exists) will be triggered
 - on[PropertyName]Changed (newValue)
 
-*Note:* property name is translated to PascalCase with "on" as prefix and "Changed" postfix. For example: for a property named "myValue" the callback invoked is "onMyValueChanged"
+> **Note:** property name is translated to PascalCase with "on" as prefix and "Changed" postfix. For example: for a property named "myValue" the callback invoked is "onMyValueChanged"
 
 At any point in the code, either by responding to events or at any point, an element can call it's own render() method, and may optionally include a custom template (as string) as an argument. This will temporary replace the content with a new content and re-run the render cycle
 - onBeforeRender

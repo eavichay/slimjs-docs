@@ -4,26 +4,21 @@ import {tag, template} from "slim-js/Decorators"
 @tag('side-menu-item')
 @template(`
 <li #rootitem has-children="[[hasChildren(item)]]" click="handleItemClick" class="mdl-list__item" click="handleSelect" bind>[[item.label]]</li>
-<div padded slim-if="item.children">
-    <side-menu-item on-selected="handleSelected" slim-repeat="item.children" slim-repeat-as="item"></side-menu-item>
+<div slim-if="item.children">
+    <side-menu-item padded on-selected="handleSelected" slim-repeat="item.children" slim-repeat-as="item"></side-menu-item>
 </div>
 <style>
+    side-menu-item {
+        display: block;
+    }
     side-menu-item[selected] > li {
-        font-weight: bold;
+        background-color: rgb(255,110,64);
+        box-shadow: 0 3px 4px 0 rgba(0,0,0,.14), 0 3px 3px -2px rgba(0,0,0,.2), 0 1px 8px 0 rgba(0,0,0,.12);
     }
     
-    side-menu-item > li[has-children="true"] {
-        padding-bottom: 0;
-    }
-    
-    side-menu-item > div[padded] {
+    side-menu-item[padded] > li{
         padding-left: 1em;
-    }
-    
-    side-menu-item > div[padded] li {
-        font-size: 100%;
-        padding-top: 0;
-        padding-bottom: 0;
+        text-indent: 1em;
     }
     
     side-menu-item > div[padded] li::before {

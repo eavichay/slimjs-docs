@@ -13,13 +13,15 @@ const markdownBank = {}
 <div slim-if="isLoading">
     <div class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
 </div>
-<div slim-if="!isRouteValid" route="[[currentRoute]]">
-    <div>:( This page does not exists. Try another topic from the menu</div>
+<div class="static-noise-effect" slim-if="!isRouteValid" route="[[currentRoute]]">
+    <div class="sad-404">:(</div>
+    <div>This entry does not exists. Try another topic (use the menu)</div>
 </div>
 <style>
   doc-router {
     padding-left: 2em;
     padding-right: 2em;
+    padding-bottom: 10em;
     width: 100%;
     overflow-x: auto;    
   }
@@ -31,11 +33,31 @@ const markdownBank = {}
   doc-router div.hljs {
     height: 100%;
   }
+  
+  doc-router > div blockquote:before {
+    content: "info";
+    font-family: "Material Icons";
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'liga' 1;
+    font-style: normal;
+    line-height: 1;
+    font-size: 1em;
+    display: inline-block;
+    overflow: hidden;
+    position: absolute;
+    left: -1em;
+    color: orange;
+  }
+  
+  doc-router > div blockquote:after {
+    content: "";
+  }
 </style>
 `)
 export default class _ extends Slim {
 
   currentRoute = ''
+  defaultRoute = ''
   _handleRouteChanged = null
   doc = null
 
@@ -43,6 +65,9 @@ export default class _ extends Slim {
   isLoading = false
 
   currentRouteChanged() {
+    if (this.currentRoute === undefined) {
+      return this.currentRoute = this.defaultRoute
+    }
     const markdownURL = `/docs/${this.currentRoute}.md`
     if (markdownBank[markdownURL]) {
       this.generateMarkdown(markdownBank[markdownURL])
@@ -74,6 +99,9 @@ export default class _ extends Slim {
       hljs.highlightBlock(e)
     })
     this.isRouteValid = true
+    Slim.__invokeAsap(() => {
+      this.scrollTop = 0
+    })
   }
 
   constructor() {
