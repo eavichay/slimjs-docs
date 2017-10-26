@@ -1,8 +1,10 @@
-# **Slim** ⇐ HTMLElement
-## Slim::tag(), @tag, @template
+# Creating an element
+### Class hirearhcy
+**Slim** ⇐ HTMLElement ⇐ Element ⇐ Node ⇐ EventTarget
+### Slim::tag(), @tag, @template
 Defining and registering a new custom element is done using either es6 syntax or es7/next decorators (with babel transpilation).
 
-### Examples
+#### Examples
 ###### es6
 ```javascript
 Slim.tag(

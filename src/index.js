@@ -6,7 +6,7 @@ import './components/header'
 import './components/side-menu'
 import './components/simple-router'
 // IE11?
-require('babel-polyfill');
+// require('babel-polyfill');
 
 @tag('slim-docs')
 @template(`
