@@ -62,6 +62,8 @@ class _ extends Slim {
       ] },
       { label: 'Data binding', target: 'data-binding' },
       { label: 'Repeating elements', target: 'repeaters'},
+      { label: 'Plugins', target: 'plugins'},
+      { label: 'Extending Slim & Directives', target: 'extending-slim'}
     ]
   }
 
