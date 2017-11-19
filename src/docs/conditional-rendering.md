@@ -2,15 +2,15 @@
 Slim.js provides a way to compute during the rendering phase what should be rendered and what should be ignored.
 A developer can manually update an element's template, or use *slim-if* attribute.
 
-### slim-if
-Slim.js' reserved attribute *slim-if* is bound to a property on the bound parent and appears in the DOM only if the result is true.
+### s:if
+Slim.js' reserved attribute *s:if* is bound to a property on the bound parent and appears in the DOM only if the result is true.
 Additionally a developer can use exclamation mark to use false values.
 For example:
 ```javascript
 @tag("my-tag")
 @template(
-  '<div slim-if="myBoolean">Now you see me</div>' +
-  '<div slim-if="!myBoolean">Now you do not!></div>')
+  '<div s:if="myBoolean">Now you see me</div>' +
+  '<div s:if="!myBoolean">Now you do not!</div>')
 class MyTag extends Slim {
   onBeforeCreated() {
     this.myBoolean = true;
@@ -20,7 +20,6 @@ class MyTag extends Slim {
   }
 }
 ```
-In the above example, every 0.5 second a change in *myBoolean* property will trigger changes in the DOM and an update cycle.
 
 ### Slim.prototype.render(customTemplate)
 A developer can invoke the render method at any time, and optionally include a custom template.
@@ -31,8 +30,8 @@ Example:
 @tag("my-tag")
 @template('<div>Hello</div>')
 class MyTag extends Slim {
-  onBeforeCreated() {
-    this.addEventListener(() => {
+  onCreated() {
+    this.addEventListener('click', () => {
       this.render('<div>Goodbye</div>')
     })
   }

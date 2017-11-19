@@ -2,18 +2,22 @@ import {Slim} from "slim-js"
 import {tag, template} from "slim-js/Decorators"
 import showdown from "showdown"
 import highlighter from "showdown-highlight"
-import hljs from 'highlight.js'
+import hljs from 'highlight.js/lib/highlight.js'
 import 'highlight.js/styles/atom-one-light.css'
+
+hljs.registerLanguage('javascript', require('highlight.js/lib/languages/javascript'))
+hljs.registerLanguage('bash', require('highlight.js/lib/languages/bash'))
+hljs.registerLanguage('html', require('highlight.js/lib/languages/htmlbars'))
 
 const markdownBank = {}
 
 @tag('doc-router')
 @template(`
-<div slim-if="isRouteValid" #doc></div>
-<div slim-if="isLoading">
+<div s:if="isRouteValid" s:id="doc"></div>
+<div s:if="isLoading">
     <div class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
 </div>
-<div class="static-noise-effect" slim-if="!isRouteValid" route="[[currentRoute]]">
+<div class="static-noise-effect" s:if="isRouteInvalid">
     <div class="sad-404">:(</div>
     <div>This entry does not exists. Try another topic (use the menu)</div>
 </div>
@@ -54,20 +58,23 @@ const markdownBank = {}
   }
 </style>
 `)
-export default class _ extends Slim {
+export default class DocsRouter extends Slim {
 
-  currentRoute = ''
-  defaultRoute = ''
-  _handleRouteChanged = null
-  doc = null
+  onBeforeCreated() {
+    this.isRouteValid = true
+    this.isRouteInvalid = false
 
-  isRouteValid = true
-  isLoading = false
+  }
+
+  onCreated() {
+    this.handleRouteChanged()
+  }
 
   currentRouteChanged() {
     if (this.currentRoute === undefined) {
       return this.currentRoute = this.defaultRoute
     }
+    window.track && window.track(this.currentRoute)
     const markdownURL = `/docs/${this.currentRoute}.md`
     if (markdownBank[markdownURL]) {
       this.generateMarkdown(markdownBank[markdownURL])
@@ -87,6 +94,7 @@ export default class _ extends Slim {
         .catch(() => {
           this.doc.innerHTML = ''
           this.isRouteValid = false
+          this.isRouteInvalid = true
           this.isLoading = false
         })
     }
@@ -99,7 +107,8 @@ export default class _ extends Slim {
       hljs.highlightBlock(e)
     })
     this.isRouteValid = true
-    Slim.__invokeAsap(() => {
+    this.isRouteInvalid = false
+    Slim.asap(() => {
       this.scrollTop = 0
     })
   }
@@ -117,5 +126,6 @@ export default class _ extends Slim {
 
   handleRouteChanged() {
     this.currentRoute = window.location.hash.split('#/')[1]
+    this.currentRouteChanged()
   }
 }

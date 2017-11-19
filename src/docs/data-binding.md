@@ -1,17 +1,17 @@
 # Data binding
 
-Slim elements support automated binding system, implicitly from element templates, using double-brackets \[\[%reference%\]\] syntax.
+Slim elements support automated binding mechanism, implicitly from element templates.
 
 There are 2 types of data binding:
 - Property → Attribute → Property binding (PAP)
 - Property → Text binding (PT)
 
-### Property → Attribute → Property ("PAP")
+### Properties and Attributes (PAP)
 This binding takes effect when a Slim custom element is nested in another Slim custom element, declared in the element's template.
 For example:
 ```javascript
 Slim.tag("parent-element",
-'<child-element target-property="[[sourceProperty]]"></child-element>',
+'<child-element bind:target-property="sourceProperty"></child-element>',
 class ParentElement extends Slim {
   onBeforeCreated() {
     this.parentProperty = "Hello"
@@ -44,39 +44,16 @@ class extends Slim {
 }
 ```
 
-#### Computed PAP binding(s)
-A declaration of a PAP binding can include a wrapping method, for filtering or modifications in the result.
-For example:
-```javascript
-Slim.tag("parent-element",
-'<child-element target-property="[[myMethod(sourceProperty)]]"></child-element>',
-class ParentElement extends Slim {
-  onBeforeCreated() {
-    this.parentProperty = "Hello"
-  }
-  
-  myMethod(value) {
-    return value.toUpperCase()
-  }
-})
-```
-In the above example, any change in *sourceProperty* on the parent-element will be passed to *myMethod* function on the parent before sent to the child.
-The child will receive the function's returned value. In this example, the upper-cased "HELLO" string.
-A method-wrapped PAP binding can contain multiple source properties, for each of them a binding object will be automatically created in the background.
-```html
-<child-element target-property="[[myMethod(propertyOne, propertyTwo)]]"></child-element>
-```
-
-### Property → Text binding ("PT")
+### Property → Text binding (PT)
 Text nodes can also contain bindings to properties defined in their *bound parent* (The element declaring the binding in it's template).
 In order to apply text-node bindings, the developer must explicitly request it using the reserved *bind* keyword attribute.
 For example:
 ```javascript
 @tag("my-tag")
-@template("<div bind>Hello, [[myName]]!</div>")
+@template("<div bind>Hello, {{myName}}!</div>")
 class MyTag extends Slim {
   onBeforeCreated() {
-    this.myName = "Custom Elements"
+    this.myName = "Custom Elements Developer"
   }
 }
 ```
@@ -85,15 +62,39 @@ A custom getter/setter with the key *myName* will be created on MyTag's instance
 
 Property → Text bindings should be used on leaf nodes (avoid nodes with children) and the developer must explicitly add *bind* attribute on the leaf node.
 
-### Data Binding with path
+#### Computed and pathed binding(s)
+##### Computer
+A declaration of a PAP binding can include a wrapping method, for filtering or modifications in the result.
+For example:
+```javascript
+Slim.tag("parent-element",
+'<child-element bind:target-property="myMethod(greeting)"></child-element>',
+class ParentElement extends Slim {
+  onBeforeCreated() {
+    this.greeting = "Hello"
+  }
+  
+  myMethod(value) {
+    return value.toUpperCase()
+  }
+})
+```
+In the above example, any change in *greeting* on the parent-element will be passed to *myMethod* function on the parent before sent to the child.
+The child will receive the function's returned value. In this example, the upper-cased "HELLO" string.
+A method-wrapped PAP binding can contain multiple source properties, for each of them a binding object will be automatically created in the background.
+```html
+<child-element bind:target-property="myMethod(propertyOne, propertyTwo)"></child-element>
+```
+
+##### Binding path
 A developer can use dot-notation in order to deeply search within an object or array.
 For example:
 ```html
-<div bind>Hello, [[user.name]]</div>
-<div prop="[[someFunction(user.name)]]"></div>
-<ul attr="[[user.name]]"></ul>
+<div bind>Hello, {{user.name}}, your role is {{getUserRole(user)}}</div>
+<div bind:prop="someFunction(user.name)"></div>
+<ul bind:attr="user.name"></ul>
 ```
-> Path binding takes effect on the "root" object, not including the path, responding to changes only on the root object's reference 
+> Path binding takes effect on the "root" of an expresison, responding to changes only on the object's reference. It does not creates an observable out of an object. 
 
 # Repositioning bound elements
 If you wish to move an element outside the template and keep the binding, use the DOM native API calls (i.e. appendChild) AFTER the element is created and the binding takes effect.

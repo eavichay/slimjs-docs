@@ -7,7 +7,7 @@ import './side-menu-item';
 @tag('side-menu')
 @template(`
 <ul class="mdl-list">
-  <side-menu-item on-selected="selectItem" slim-repeat="items" slim-repeat-as="item"></side-menu-item>
+  <side-menu-item on-selected="selectItem" s:repeat="items as item"></side-menu-item>
 </ul>
 <style>
     side-menu {
@@ -18,13 +18,11 @@ import './side-menu-item';
     }
 </style>
 `)
-export default class _ extends Slim {
-
-  items = []
-
-  selectedItem = null
+export default class SideMenu extends Slim {
 
   onBeforeCreated() {
+    this.items = []
+    this.selectedItem = null
     this.addEventListener('menu-item-selected', e => this.selectItem(e.detail))
   }
 

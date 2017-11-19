@@ -13,8 +13,8 @@ import GithubIcon from '../assets/github-icon.png'
     <span class="mdl-layout-spacer"></span>
       
     <nav class="mdl-navigation">
-        <span><a class="mdl-navigation__link" href="https://github.com/eavichay/slim.js/issues">Submit an issue</a></span>
-        <span><a class="mdl-navigation__link" href="https://github.com/eavichay/slimjs-docs/issues">Submit a documentation issue</a></span>
+        <span><a class="mdl-navigation__link" href="javascript:track('issue', 'https://github.com/eavichay/slim.js/issues')">Submit an issue</a></span>
+        <span><a class="mdl-navigation__link" href="javascript:track('doc-issue', 'https://github.com/eavichay/slimjs-docs/issues')">Submit a documentation issue</a></span>
     </nav>
 </nav>
 <style>
@@ -23,4 +23,4 @@ import GithubIcon from '../assets/github-icon.png'
     }
 </style>
 `)
-export default class _ extends Slim {}
+class SlimDocsHeader extends Slim {}

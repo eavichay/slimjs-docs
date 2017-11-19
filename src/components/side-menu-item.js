@@ -3,9 +3,10 @@ import {tag, template} from "slim-js/Decorators"
 
 @tag('side-menu-item')
 @template(`
-<li #rootitem has-children="[[hasChildren(item)]]" click="handleItemClick" class="mdl-list__item" click="handleSelect" bind>[[item.label]]</li>
-<div slim-if="item.children">
-    <side-menu-item padded on-selected="handleSelected" slim-repeat="item.children" slim-repeat-as="item"></side-menu-item>
+<li #rootitem bind:with-children="hasChildren(item)" click="handleItemClick"
+  class="mdl-list__item" click="handleSelect" bind>{{item.label}}</li>
+<div s:if="item.children">
+    <side-menu-item padded on-selected="handleSelected" s:repeat="item.children as item"></side-menu-item>
 </div>
 <style>
     side-menu-item {
@@ -26,7 +27,7 @@ import {tag, template} from "slim-js/Decorators"
     }
 </style>
 `)
-class _ extends Slim {
+class SideMenuItem extends Slim {
 
   item = null
 
@@ -47,8 +48,8 @@ class _ extends Slim {
     return item && item.children ? 'true' : 'false'
   }
 
-  onUpdate() {
-    this.subMenu = this.item.children
+  onCreated() {
+    this.subMenu = this.item && this.item.children
   }
 
   checkRoute() {
@@ -64,7 +65,7 @@ class _ extends Slim {
   }
 
   onItemChanged() {
-    this.subMenu = this.item.children || [];
+    this.subMenu = this.item && this.item.children || [];
   }
 
   propagateSelected(item) {

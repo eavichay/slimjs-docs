@@ -32,17 +32,13 @@ module.exports = {
       }
     ]
   },
-  devtool: 'source-map',
   target: 'web',
   stats: 'errors-only',
-  devServer: {
-    contentBase: './dist'
-  },
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
       template: './src/index.html',
-      title: 'Development'
+      title: 'Slim.js Documentation'
     }),
     new CopyWebpackPlugin([
       {
@@ -56,3 +52,4 @@ module.exports = {
     ])
   ]
 }
+

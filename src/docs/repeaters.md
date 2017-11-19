@@ -7,7 +7,7 @@ For example:
 @tag("my-tag")
 @template(`
 <ul>
-  <li slim-repeat="items" slim-repeat-as="item" bind>[[item]]</li>
+  <li s:repeat="items as item" bind>{{item}}</li>
 </ul>
 `)
 class MyTag extends Slim {
@@ -19,24 +19,20 @@ class MyTag extends Slim {
 Every instance of *li* element will be automatically bound to the repeater's source array via the "item" property.
 Additionally, *data_index* and *data_source* properties will also be injected to the target elements.
 
-By default, when *slim-repeat-as* is not provided, the key "data" will be used.
+By default, when *s:repeat*'s *as* is not provided, the key "data" will be used. In the above example:
+```html
+<li s:repeat="items" bind>{{data}}</li>
+```
 
 ### Array mutations & Best practice
-Slim.js enhances Array.prototype's *pop*, *push*, *shift*, *splice*, *unshift* methods to notify repeaters of a change.
-Though the best practice is to replace the array reference with a new array (for faster performance), it is not mandatory.
-All repeaters automatically subscribe to an array for mutations and respond when these happen.
-Batched changes does not cost more in terms of performance: the repeater response is asynchronous and collect all changes within
-one event loop of the javascript engine.
-
-Though mutations do create response, they do not detect changes within the array. The best practice is to use immutable arrays as data source
-and replace those with new arrays for every mutation in the data (Array.concat, Array.filter, Array.map etc.)
+Array mutations do not create response, nor repeater elements detect changes within the array. The best practice is to use immutable arrays as data source.
 
 ### Repeating elements with additional data binding(s)
 A developer that uses PAP or PT binding to all repeated children should consider that the property name declared in *slim-repeat-as* will be excluded (defaulted to "data").
 Example:
 ```html
 <ul>
-    <li slim-repeat="items" slim-repeat-as="item" bind>The item is [[item]] and this is [[otherProperty]]</li>
+    <li s:repeat="items as item" bind>The item is {{item}} and this is {{otherProperty}}</li>
 </ul>
 ```
 In the above example, the bound parent's *otherProperty* is bound to the *li* elements' inner-text, as *item* on the *li* elements is bound to the array *items*.

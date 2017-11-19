@@ -13,11 +13,13 @@ import './components/simple-router'
 <div vbox id="main_container">
     <slim-docs-header class="mdl-layout__header mdl-layout--fixed-header"></slim-docs-header>
     <div id="docs_container" hbox>
-      <side-menu vbox class="mdl-components__nav docs-text-styling mdl-shadow--4dp" on-item-select="handleItemSelected" items="[[menuItems]]"></side-menu>
-      <doc-router vbox default-route="[[menuItems.0.target]]"></doc-router>
+      <side-menu vbox class="mdl-components__nav docs-text-styling mdl-shadow--4dp"
+        on-item-select="handleItemSelected"
+        bind:items="menuItems"></side-menu>
+      <doc-router vbox bind:default-route="getDefaultRoute(menuItems)"></doc-router>
     </div>
 </div>
-<a href="https://github.com/eavichay/slim.js" target="_blank" id="view-source"
+<a href="javascript:track('github', 'https://github.com/eavichay/slim.js')" target="_blank" id="view-source"
     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">
     <i class="material-icons md-24">link</i> <span>View on github</span>
     <span class="mdl-button__ripple-container">
@@ -43,39 +45,40 @@ import './components/simple-router'
 `)
 class _ extends Slim {
 
-  menuItems = [
-    { label: 'Getting started', target: 'getting-started' },
-    { label: 'Creating an element', target: 'creating-an-element', children: [
-      { label: 'Lifecycle', target: 'component-lifecycle' },
-      { label: 'Accessing children', target: 'accessing-children'},
-      { label: 'Conditional rendering', target: 'conditional-rendering'},
-      { label: 'Shadow-DOM', target: 'shadow-dom'}
-    ] },
-    { label: 'Data binding', target: 'data-binding' },
-    { label: 'Repeating elements', target: 'repeaters'},
-  ]
-
   constructor() {
     super()
-    this.style.visibility = 'hidden';
     this.classList.add('mdl-layout__container')
     this.classList.add('has-scrolling-header')
+  }
+
+  onBeforeCreated() {
+    this.menuItems = [
+      { label: 'Getting started', target: 'getting-started' },
+      { label: 'Creating an element', target: 'creating-an-element', children: [
+        { label: 'Lifecycle', target: 'component-lifecycle' },
+        { label: 'Accessing children', target: 'accessing-children'},
+        { label: 'Conditional rendering', target: 'conditional-rendering'},
+        { label: 'Shadow-DOM', target: 'shadow-dom'}
+      ] },
+      { label: 'Data binding', target: 'data-binding' },
+      { label: 'Repeating elements', target: 'repeaters'},
+    ]
+  }
+
+  getDefaultRoute(items) {
+    return this.menuItems[0].target
   }
 
   handleItemSelected(item) {
     window.location.hash = `/${item.target}`
   }
 
-  onAfterUpdate() {
-    // this.find('side-menu').selectItem(this.menuItems[0])
-    Slim.__invokeAsap(() => {
+  onCreated() {
+    Slim.asap(() => {
       if (window.location.hash === '') {
         window.location.hash = '#/getting-started'
       }
-      this.style.visibility = null
+      // this.style.visibility = null
     })
   }
 }
-
-const Root = new _()
-document.body.appendChild(Root)

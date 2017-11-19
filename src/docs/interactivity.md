@@ -14,12 +14,21 @@ Native HTML Elements respond to interactive events by default, as opposed to Sli
 In-order to enable interactivity with native DOM events, either use the reserved *interactive* attribute on the declared
 Slim element:
 ```html
-<my-slim-child interactive click="handleClick"></my-slim-child>
+<my-slim-child click="handleClick"></my-slim-child>
 ```
-or use *\[get\] isInteractive* property on the class declaration:
+
+Example using native event:
 ```javascript
-class MyChildElement extends Slim {
-  get isInteractive() { return true }
+import {Slim} from 'slim-js'
+import {tag, template} from 'slim-js/Decorators'
+
+@tag('some-element')
+@template('<div click="clickHandler">Click me!</div>')
+class SomeElement extends Slim {
+  
+  clickHandler(e) {
+    console.log('Click', e) // Native MouseEvent
+  }
 }
 ```
 

@@ -14,7 +14,7 @@ Slim.tag(
     // your code here
   })
 ```
-###### es7/next
+###### es6/next/typescript
 ```javascript
 import {Slim} from 'slim-js'
 import {tag, template} from 'slim-js/Decorators'
