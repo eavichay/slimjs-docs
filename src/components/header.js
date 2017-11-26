@@ -20,6 +20,7 @@ import GithubIcon from '../assets/github-icon.png'
 <style>
     slim-docs-header {
         display: block !important;
+        overflow-x: auto;
     }
 </style>
 `)

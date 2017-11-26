@@ -15,6 +15,9 @@ import './side-menu-item';
         max-width: 20em;
         min-width: 12em;
         width: 30%;
+        min-height: 100vh;
+        height: 100%;
+        position: static;
     }
 </style>
 `)

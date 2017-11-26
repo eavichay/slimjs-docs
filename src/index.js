@@ -29,7 +29,7 @@ import './components/simple-router'
 </a>
 <style>
     slim-docs #docs_container {
-        height: 100%
+        height: auto;
     }
     
     #view-source {
