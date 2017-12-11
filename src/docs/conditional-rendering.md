@@ -21,6 +21,17 @@ class MyTag extends Slim {
 }
 ```
 
+### s:switch
+Slim.js' reserved attributes *s:switch*, *s:case*, *s:default* offer conditional rendering upon changing a value and compares to it's string representation.
+Example:
+```html
+<div s:switch="myProperty">
+  <div s:case="value1">myProperty === 'value1'</div>
+  <div s:case="value2">myProperty === 'value2'</div>
+  <div s:default>myProperty is something else</div>
+</div>
+```
+
 ### Slim.prototype.render(customTemplate)
 A developer can invoke the render method at any time, and optionally include a custom template.
 When a custom template is provided, it will temporarily replace the template with the new template, destroying all it's children.
