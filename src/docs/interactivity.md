@@ -19,7 +19,7 @@ Slim element:
 
 Example using native event:
 ```javascript
-import {Slim} from 'slim-js'
+// import {Slim} from 'slim-js'
 import {tag, template} from 'slim-js/Decorators'
 
 @tag('some-element')

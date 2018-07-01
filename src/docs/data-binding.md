@@ -34,7 +34,7 @@ Bindings are not exclusive for 1st level children. Any element declared in a tem
 
 If a Slim element is not nested in any other Slim element and still requires binding a property to an attribute, it is done using the @attribute decorator.
 ```javascript
-import {Slim} from 'slim-js'
+// import {Slim} from 'slim-js'
 import {tag, attribute} from 'slim-js/Decorators'
 
 @tag('some-element')

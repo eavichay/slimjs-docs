@@ -1,39 +1,45 @@
-import {Slim} from "slim-js"
+// import {Slim} from "slim-js"
 import {tag, template} from "slim-js/Decorators"
 
 @tag('side-menu-item')
 @template(`
-<li #rootitem bind:with-children="hasChildren(item)" click="handleItemClick"
-  class="mdl-list__item" click="handleSelect" bind>{{item.label}}</li>
+<li bind:with-children="hasChildren(item)" click="handleItemClick" click="handleSelect">{{item.label}}</li>
 <div s:if="item.children">
     <side-menu-item padded on-selected="handleSelected" s:repeat="item.children as item"></side-menu-item>
 </div>
 <style>
     side-menu-item {
-        display: block;
+        transition: all;
+        display: inline-flex;
+        width: 100%;
+        flex-direction: column;
     }
+
+    side-menu-item li {
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      padding: 0.5rem;
+      padding-left: 1.5rem;
+    }
+
     side-menu-item[selected] > li {
-        background-color: rgb(255,110,64);
-        box-shadow: 0 3px 4px 0 rgba(0,0,0,.14), 0 3px 3px -2px rgba(0,0,0,.2), 0 1px 8px 0 rgba(0,0,0,.12);
+      background-color: rgb(255,110,64);
+      padding-left: 1.8rem;
+      box-shadow: 0 3px 4px 0 rgba(0,0,0,.14), 0 3px 3px -2px rgba(0,0,0,.2), 0 1px 8px 0 rgba(0,0,0,.12);
     }
     
-    side-menu-item[padded] > li{
-        padding-left: 1em;
-        text-indent: 1em;
+    side-menu-item[padded] > li {
+        padding-left: 3rem;
+    }
+
+    side-menu-item[padded][selected] > li {
+      padding-left: 3.2rem;
     }
     
-    side-menu-item > div[padded] li::before {
-        content: '';
-    }
 </style>
 `)
 class SideMenuItem extends Slim {
-
-  item = null
-
-  subMenu = null
-
-  _checkRoute = null
 
   onBeforeCreated() {
     this._checkRoute = this.checkRoute.bind(this)

@@ -1,27 +1,23 @@
-import {Slim} from "slim-js"
+// import {Slim} from "slim-js"
 import {tag, template} from "slim-js/Decorators"
-import showdown from "showdown"
-import highlighter from "showdown-highlight"
 import hljs from 'highlight.js/lib/highlight.js'
-import 'highlight.js/styles/atom-one-light.css'
+import atomCSS from '../assets/atom-css'
+
+const {marked} = window;
 
 hljs.registerLanguage('javascript', require('highlight.js/lib/languages/javascript'))
-hljs.registerLanguage('bash', require('highlight.js/lib/languages/bash'))
 hljs.registerLanguage('html', require('highlight.js/lib/languages/htmlbars'))
 
 const markdownBank = {}
 
 @tag('doc-router')
 @template(`
-<div s:if="isRouteValid" s:id="doc"></div>
-<div s:if="isLoading">
-    <div class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+<div s:if="isRouteInvalid">
+  <h1>Oops, this page does not exists</h1>
+  <p>Try looking for something from the menu</p>
 </div>
-<div class="static-noise-effect" s:if="isRouteInvalid">
-    <div class="sad-404">:(</div>
-    <div>This entry does not exists. Try another topic (use the menu)</div>
-</div>
-<style>
+<div s:id="doc" s:if="isRouteValid"></div>
+<style> 
   doc-router {
     padding-left: 2em;
     padding-right: 2em;
@@ -29,16 +25,35 @@ const markdownBank = {}
     width: 100%;
     overflow-x: auto;    
   }
+
   doc-router pre {
-    border-left: 1px dotted grey;
     padding-left: 1em;
+    background-color: #333333;
+    color: lightblue;
+    padding-bottom: 2rem;
+    padding-top: 1rem;
+    border-radius: 0.3rem;
+  }
+
+  doc-router h6 {
+    font-size: 1rem;
+    font-style: italic;
+  }
+
+  doc-router a, doc-router a:visited {
+    text-decoration: none;
+    color: #444444;
+    background-color: #dddddd;
+    border-radius: 0.2rem;
+    padding: 0 0.5rem 0 0.5rem;
+    font-style: italic;
+  }
+
+  doc-router a:hover {
+    text-decoration: underline;
   }
   
-  doc-router div.hljs {
-    height: 100%;
-  }
-  
-  doc-router > div blockquote:before {
+  doc-router div blockquote:before {
     content: "info";
     font-family: "Material Icons";
     text-rendering: optimizeLegibility;
@@ -53,20 +68,25 @@ const markdownBank = {}
     color: orange;
   }
   
-  doc-router > div blockquote:after {
+  doc-router div blockquote:after {
     content: "";
   }
+
+  ${atomCSS}
 </style>
 `)
 export default class DocsRouter extends Slim {
 
-  onBeforeCreated() {
+  constructor () {
+    super()
     this.isRouteValid = true
     this.isRouteInvalid = false
-
+    this._handleRouteChanged = this.handleRouteChanged.bind(this)
+    this.currentRoute = window.location.hash.split('#/')[1]
   }
 
-  onCreated() {
+  onRender() {
+    window.addEventListener('hashchange', this._handleRouteChanged)
     this.handleRouteChanged()
   }
 
@@ -101,8 +121,8 @@ export default class DocsRouter extends Slim {
   }
 
   generateMarkdown(content) {
-    const converter = new showdown.Converter({extensions: [highlighter]})
-    this.doc.innerHTML = converter.makeHtml(content)
+    const converter = marked(content) // new showdown.Converter()
+    this.doc.innerHTML = converter; //converter.makeHtml(content)
     this.findAll('pre').forEach(e => {
       hljs.highlightBlock(e)
     })
@@ -111,13 +131,6 @@ export default class DocsRouter extends Slim {
     Slim.asap(() => {
       this.scrollTop = 0
     })
-  }
-
-  constructor() {
-    super()
-    this._handleRouteChanged = this.handleRouteChanged.bind(this)
-    window.addEventListener('hashchange', this._handleRouteChanged)
-    this.currentRoute = window.location.hash.split('#/')[1]
   }
 
   onRemoved() {
