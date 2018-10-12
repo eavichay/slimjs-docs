@@ -8,7 +8,39 @@ A Slim element can add event listeners via template. Example
 </ul>
 ```
 Slim.js will automatically add event listeners on the target elements and invoke the declared method name on the bound parent,
-passing the native DOM event as an argument.
+passing the native DOM event as an argument. 
+Currently natively supported events are the following:
+
+- click
+- mouseover
+- mouseout
+- mousemove
+- mouseenter
+- mousedown
+- mouseup
+- dblclick
+- contextmenu
+- wheel
+- mouseleave
+- select
+- pointerlockchange
+- pointerlockerror
+- focus
+- blur
+- input
+- error
+- invalid
+- animationstart
+- animationend
+- animationiteration
+- reset
+- submit
+- resize
+- scroll
+- keydown
+- keypress
+- keyup
+- change
 
 Native HTML Elements respond to interactive events by default, as opposed to Slim elements.
 In-order to enable interactivity with native DOM events, either use the reserved *interactive* attribute on the declared
