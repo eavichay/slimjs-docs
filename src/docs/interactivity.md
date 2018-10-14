@@ -9,12 +9,13 @@ A Slim element can add event listeners via template. Example
 ```
 Slim.js will automatically add event listeners on the target elements and invoke the declared method name on the bound parent,
 passing the native DOM event as an argument.
+The supported events are based on HTMLElement.prototype possible dispatched events (This is calculated by detecting the HTMLElement.prototype.on<x> method names).
 
 Native HTML Elements respond to interactive events by default, as opposed to Slim elements.
 In-order to enable interactivity with native DOM events, either use the reserved *interactive* attribute on the declared
 Slim element:
 ```html
-<my-slim-child click="handleClick"></my-slim-child>
+<my-slim-child click="handleClick" transitionend="handleTransitionEnd"></my-slim-child>
 ```
 
 Example using native event:
@@ -28,6 +29,10 @@ class SomeElement extends Slim {
   
   clickHandler(e) {
     console.log('Click', e) // Native MouseEvent
+  }
+  
+  handleTransitionEnd(e) {
+    console.log('Transition Ended', e) // native transitionend event
   }
 }
 ```
