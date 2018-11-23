@@ -1,6 +1,6 @@
 # Creating an element
 
-### Class hirearhcy
+### Class hierarchy
 
 **Slim** ⇐ HTMLElement ⇐ Element ⇐ Node ⇐ EventTarget
 
