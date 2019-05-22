@@ -15,6 +15,10 @@ import {tag, template} from "slim-js/Decorators"
         flex-direction: column;
     }
 
+    side-menu-item:hover {
+      cursor: pointer;
+    }
+
     side-menu-item li {
       transition: all 0.2s;
       display: inline-flex;
