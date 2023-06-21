@@ -21,7 +21,7 @@
   "homepage": "https://github.com/eavichay/slim-webpack-boilerplate",
   "dependencies": {
     "@webcomponents/webcomponentsjs": "^2.0.0",
-    "showdown": "^1.7.6",
+    "showdown": "^2.0.2",
     "showdown-highlight": "^1.0.2",
     "slim-js": "^3.3.0"
   },
